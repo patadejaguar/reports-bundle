@@ -13,7 +13,7 @@ namespace Novosga\ReportsBundle\Form;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
-use Novosga\Entity\Usuario;
+use Novosga\Entity\UsuarioInterface;
 use Novosga\ReportsBundle\Helper\Relatorio;
 use Novosga\ReportsBundle\Controller\DefaultController;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -83,15 +83,15 @@ class ReportType extends AbstractType
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
-                'data' => $yesterday,
+                'data'   => $yesterday,
             ])
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
-                'data' => $today,
+                'data'   => $today,
             ])
             ->add('usuario', EntityType::class, [
-                'class'         => Usuario::class,
+                'class'         => UsuarioInterface::class,
                 'placeholder'   => 'Todos',
                 'required'      => false,
                 'query_builder' => function (EntityRepository $repo) {

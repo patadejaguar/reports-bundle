@@ -13,7 +13,7 @@ namespace Novosga\ReportsBundle\Form;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
-use Novosga\Entity\Usuario;
+use Novosga\Entity\UsuarioInterface;
 use Novosga\ReportsBundle\Controller\DefaultController;
 use Novosga\ReportsBundle\Helper\Grafico;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -82,7 +82,7 @@ class ChartType extends AbstractType
                 'data' => $today,
             ])
             ->add('usuario', EntityType::class, [
-                'class'         => Usuario::class,
+                'class'         => UsuarioInterface::class,
                 'required'      => false,
                 'placeholder'   => 'Todos',
                 'query_builder' => function (EntityRepository $repo) {

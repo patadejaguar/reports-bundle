@@ -13,18 +13,18 @@ namespace Novosga\ReportsBundle\Controller;
 
 use DateTime;
 use Exception;
-use Novosga\Entity\ViewAtendimentoCodificado;
-use Novosga\Entity\ViewAtendimento;
-use Novosga\Entity\Lotacao;
-use Novosga\Entity\Perfil;
-use Novosga\Entity\Servico;
-use Novosga\Entity\ServicoUnidade;
-use Novosga\Entity\Unidade;
+use Novosga\Entity\ViewAtendimentoCodificadoInterface;
+use Novosga\Entity\ViewAtendimentoInterface;
+use Novosga\Entity\LotacaoInterface;
+use Novosga\Entity\PerfilInterface;
+use Novosga\Entity\ServicoInterface;
+use Novosga\Entity\ServicoUnidadeInterface;
+use Novosga\Entity\UnidadeInterface;
 use Novosga\Http\Envelope;
 use Novosga\ReportsBundle\Form\ChartType;
 use Novosga\ReportsBundle\Form\ReportType;
-use Novosga\Service\AtendimentoService;
-use Novosga\Service\UsuarioService;
+use App\Service\AtendimentoService;
+use App\Service\UsuarioService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -215,7 +215,7 @@ class DefaultController extends AbstractController
             ->getManager()
             ->createQueryBuilder()
             ->select('COUNT(e)')
-            ->from(ViewAtendimento::class, 'e')
+            ->from(ViewAtendimentoInterface::class, 'e')
             ->where('e.dataChegada >= :inicio')
             ->andWhere('e.dataChegada <= :fim')
             ->andWhere('e.unidade = :unidade')
@@ -252,7 +252,7 @@ class DefaultController extends AbstractController
                 's.nome as servico',
                 'COUNT(a) as total',
             ])
-            ->from(ViewAtendimento::class, 'a')
+            ->from(ViewAtendimentoInterface::class, 'a')
             ->join('a.unidade', 'u')
             ->join('a.servico', 's')
             ->where('a.status = :status')
@@ -303,7 +303,7 @@ class DefaultController extends AbstractController
                 'AVG(a.tempoAtendimento) as atendimento',
                 'AVG(a.tempoPermanencia) as total',
             ])
-            ->from(ViewAtendimento::class, 'a')
+            ->from(ViewAtendimentoInterface::class, 'a')
             ->join('a.unidade', 'u')
             ->where('a.dataChegada >= :inicio')
             ->andWhere('a.dataChegada <= :fim')
@@ -337,7 +337,7 @@ class DefaultController extends AbstractController
                 'e',
                 'sub'
             ])
-            ->from(Servico::class, 'e')
+            ->from(ServicoInterface::class, 'e')
             ->leftJoin('e.subServicos', 'sub')
             ->where('e.mestre IS NULL')
             ->orderBy('e.nome', 'ASC')
@@ -363,7 +363,7 @@ class DefaultController extends AbstractController
                 's',
                 'sub'
             ])
-            ->from(ServicoUnidade::class, 'e')
+            ->from(ServicoUnidadeInterface::class, 'e')
             ->join('e.servico', 's')
             ->leftJoin('s.subServicos', 'sub')
             ->where('s.mestre IS NULL')
@@ -392,7 +392,7 @@ class DefaultController extends AbstractController
                 'COUNT(s.id) as total',
                 's.nome',
             ])
-            ->from(ViewAtendimentoCodificado::class, 'c')
+            ->from(ViewAtendimentoCodificadoInterface::class, 'c')
             ->join('c.servico', 's')
             ->join('c.atendimento', 'e')
             ->where('e.unidade = :unidade')
@@ -427,7 +427,7 @@ class DefaultController extends AbstractController
             ->getManager()
             ->createQueryBuilder()
             ->select('e')
-            ->from(ViewAtendimento::class, 'e')
+            ->from(ViewAtendimentoInterface::class, 'e')
             ->where('e.unidade = :unidade')
             ->andWhere('e.status = :status')
             ->andWhere('e.dataChegada >= :dataInicial')
@@ -461,7 +461,7 @@ class DefaultController extends AbstractController
             ->getManager()
             ->createQueryBuilder()
             ->select('e')
-            ->from(ViewAtendimento::class, 'e')
+            ->from(ViewAtendimentoInterface::class, 'e')
             ->where('e.unidade = :unidade')
             ->andWhere('e.dataChegada >= :dataInicial')
             ->andWhere('e.dataChegada <= :dataFinal')
@@ -500,7 +500,7 @@ class DefaultController extends AbstractController
                 'AVG(a.tempoAtendimento) as atendimento',
                 'AVG(a.tempoPermanencia) as tempoTotal',
             ])
-            ->from(ViewAtendimento::class, 'a')
+            ->from(ViewAtendimentoInterface::class, 'a')
             ->join('a.usuario', 'u')
             ->where('a.unidade = :unidade')
             ->andWhere('a.dataChegada >= :dataInicial')
@@ -542,7 +542,7 @@ class DefaultController extends AbstractController
                 'uni',
                 'c',
             ])
-            ->from(Lotacao::class, 'e')
+            ->from(LotacaoInterface::class, 'e')
             ->join('e.usuario', 'usu')
             ->join('e.unidade', 'uni')
             ->join('e.perfil', 'c')
@@ -579,7 +579,7 @@ class DefaultController extends AbstractController
         $dados  = [];
         $perfis = $this
             ->getDoctrine()
-            ->getRepository(Perfil::class)
+            ->getRepository(PerfilInterface::class)
             ->findBy([], [ 'nome' => 'ASC' ]);
         
         foreach ($perfis as $perfil) {
@@ -593,7 +593,7 @@ class DefaultController extends AbstractController
     }
     
     /**
-     * @return Unidade
+     * @return UnidadeInterface
      */
     private function getUnidade()
     {
