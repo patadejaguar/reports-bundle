@@ -7,8 +7,7 @@
     },
     "require": {
         "php": "^7.1.3",
-        "novosga/core": "^2.0",
-        "reportico/laravel-reportico": "~5.2"
+        "novosga/core": "^2.0"
     },
     "extra": {
         "branch-alias": {
